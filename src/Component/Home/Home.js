@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import '../../App.css';
 import Pokemon from '../Pokemon/pokemon';
 import '../Navbar/Navbar.css'
 import Navbar from '../Navbar/Navbar';
 
 function Home() {
   const [allPokemons, setAllPokemons] = useState([]);
-  const [loadPokemons, setLoadPokemons] = useState('https://pokeapi.co/api/v2/pokemon/?limit=20');
+  const [loadPokemons, setLoadPokemons] = useState('https://pokeapi.co/api/v2/pokemon?limit=20');
 
   const getAllPokemons = async () => {
     const resp = await fetch(loadPokemons);
@@ -19,9 +18,11 @@ function Home() {
         const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`)
         const data = await res.json()
 
+        const pokemonName = pokemon.name.charAt(0).toUpperCase();
+
         setAllPokemons(currentList => [...currentList, data]);
 
-        allPokemons.sort((a,b) => a.id - b.id);
+        await allPokemons.sort((a,b) => a.id - b.id);
 
       });
     };
@@ -30,11 +31,11 @@ function Home() {
 
   useEffect(() => {
     getAllPokemons()
-  });
+  }, []);
 
   return (
     <>
-    <div className='App'>
+    <div className='navbar-container'>
       <Navbar />
     </div>
     <div className="app-container">
@@ -55,7 +56,7 @@ function Home() {
           />
           )}
         </div>
-        <button className="load-more" onClick={() => getAllPokemons()}>Load</button>
+        <button className="load-more" onClick={() => getAllPokemons()}>Load Pokemons</button>
       </div>
     </div>
   </>
